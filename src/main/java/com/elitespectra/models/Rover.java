@@ -11,7 +11,7 @@ public class Rover {
     public Rover(Plateau plateau, String roverName, int xCoordinate, int yCoordinate, String face) {
 
         if (xCoordinate > plateau.getX() || yCoordinate > plateau.getY())
-            throw new IllegalArgumentException("Rover Coordinates outside Plateau range");
+            throw new IllegalArgumentException(roverName + " Rover coordinates outside Plateau range");
 
         this.plateau = plateau;
         this.roverName = roverName;

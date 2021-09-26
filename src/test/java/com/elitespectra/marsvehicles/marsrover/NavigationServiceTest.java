@@ -16,6 +16,7 @@ public class NavigationServiceTest {
     Rover alpha = new Rover(plateau, "Alpha", 1, 2, "N");
     Rover beta = new Rover(plateau, "Beta", 3, 3, "E");
     Rover vega = new Rover(plateau, "Beta", 2, 4, "N");
+    Rover gamma = new Rover(plateau, "Gamma", 5, 5, "N");
 
 
     @Before
@@ -27,6 +28,8 @@ public class NavigationServiceTest {
         roverNavigationService.addRover(alpha);
         roverNavigationService.addRover(beta);
         roverNavigationService.addRover(vega);
+        roverNavigationService.addRover(gamma);
+
     }
 
 
@@ -64,8 +67,18 @@ public class NavigationServiceTest {
 
         assertEquals("00W", actualCoordinatesAndFace);
 
+
     }
 
+    @Test
+    public void checkRoverCantMoveOutsidePlateau() {
+
+        assertThrows(IllegalArgumentException.class, () ->
+                        roverNavigationService.navigateRover(gamma, "F"));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.navigateRover(gamma, "LLB"));
+    }
 
     @Test
     public void checkInitialRoverCoordinatesNotOutsidePlateau() {

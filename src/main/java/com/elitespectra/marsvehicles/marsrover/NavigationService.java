@@ -50,15 +50,23 @@ public class NavigationService {
                             tempCoordinatesMap.get("yCoordinate"),
                             tempFace, navigationCommand);
 
-                    roverNavigationSuccess = isSpaceAvailableToLandOrMove(
-                            rover.getRoverName(),
-                            tempCoordinatesMap.get("xCoordinate"),
-                            tempCoordinatesMap.get("yCoordinate"));
+                    if (tempCoordinatesMap.get("xCoordinate") > rover.getPlateau().getX()
+                            || tempCoordinatesMap.get("yCoordinate") > rover.getPlateau().getY()) {
+
+                        roverNavigationSuccess = false;
+
+                    } else {
+                        roverNavigationSuccess = isSpaceAvailableToLandOrMove(
+                                rover.getRoverName(),
+                                tempCoordinatesMap.get("xCoordinate"),
+                                tempCoordinatesMap.get("yCoordinate"));
+                    }
 
                     if (!roverNavigationSuccess)
-                        throw new IllegalStateException("Rover can't be navigated to the commanded coordinates");
+                        throw new IllegalArgumentException(rover.getRoverName() +
+                                " Rover can't be navigated to the commanded coordinates");
                 }
-                default -> throw new IllegalStateException("Unexpected value: " + navigationCommand);
+                default -> throw new IllegalArgumentException("Unexpected value: " + navigationCommand);
             }
         }
 
