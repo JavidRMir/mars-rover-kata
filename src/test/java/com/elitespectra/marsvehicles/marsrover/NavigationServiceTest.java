@@ -5,29 +5,35 @@ import com.elitespectra.models.Rover;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 
 public class NavigationServiceTest {
 
     NavigationService roverNavigationService = new NavigationService();
 
     Plateau plateau = new Plateau(5, 5);
+
     Rover alpha = new Rover(plateau, "Alpha", 1, 2, "N");
     Rover beta = new Rover(plateau, "Beta", 3, 3, "E");
+    Rover vega = new Rover(plateau, "Beta", 2, 4, "N");
 
 
     @Before
-    public void setUp() {
+    public void setUp() throws InstantiationException {
+
+        // Try adding rovers to roverNavigationService which is an instance of NavigationService
+        // If rover already exists in the roverNavigationService, it can't be added to roverNavigationService
+
         roverNavigationService.addRover(alpha);
         roverNavigationService.addRover(beta);
+        roverNavigationService.addRover(vega);
     }
 
 
     @Test
-    public void checkFinalRoverCoordinatesAndFace() {
+    public void checkForwardMovingFinalRoverCoordinatesAndFace() {
 
-        roverNavigationService.navigateRover(alpha, "LMLMLMLMM");
+        roverNavigationService.navigateRover(alpha, "LFLFLFLFF");
 
         String actualCoordinatesAndFace = String.valueOf(alpha.getxCoordinate()) +
                 String.valueOf(alpha.getyCoordinate()) +
@@ -36,8 +42,7 @@ public class NavigationServiceTest {
         assertEquals("13N", actualCoordinatesAndFace);
 
 
-
-        roverNavigationService.navigateRover(beta, "MMRMMRMRRM");
+        roverNavigationService.navigateRover(beta, "FFRFFRFRRF");
 
         actualCoordinatesAndFace = String.valueOf(beta.getxCoordinate()) +
                 String.valueOf(beta.getyCoordinate()) +
@@ -47,26 +52,55 @@ public class NavigationServiceTest {
 
     }
 
+
     @Test
-    public void checkInitialRoverCoordinatesNotOutsidePlateau() {
+    public void checkForwardAndBackwardMovingFinalRoverCoordinatesAndFace() {
 
-        assertThrows(IllegalArgumentException.class, () ->
-                roverNavigationService.addRover(new Rover(
-                        plateau, "Zetron",
-                        1, plateau.getX() + 1,
-                        "N")));
+        roverNavigationService.navigateRover(vega, "BBBLFLFRF");
 
-        assertThrows(IllegalArgumentException.class, () ->
-                roverNavigationService.addRover(new Rover(
-                        plateau, "Sirius",
-                        plateau.getX() + 1, plateau.getX() + 1,
-                        "N")));
+        String actualCoordinatesAndFace = String.valueOf(vega.getxCoordinate()) +
+                String.valueOf(vega.getyCoordinate()) +
+                vega.getFace();
+
+        assertEquals("00W", actualCoordinatesAndFace);
 
     }
 
 
     @Test
-    public void checkRoversNotColliding() {
+    public void checkInitialRoverCoordinatesNotOutsidePlateau() {
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.addRover(new Rover(plateau, "Zetron", 1,
+                        plateau.getX() + 1, "N")));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.addRover(new Rover(plateau, "Sirius", plateau.getX() + 1,
+                        plateau.getX() + 1, "N")));
+
+    }
+
+
+    @Test
+    public void checkRoverNotGoingToCollide() {
+
+        // A rover can't be landed or moved to coordinates where there's a rover already positioned
+        assertFalse(roverNavigationService.isSpaceAvailableToLandOrMove(
+                "TempRover",
+                alpha.getxCoordinate(),
+                alpha.getyCoordinate()));
+
+        // A rover can't be landed or moved to coordinates where there's a rover already positioned
+        assertFalse(roverNavigationService.isSpaceAvailableToLandOrMove(
+                "TempRover",
+                beta.getxCoordinate(),
+                beta.getyCoordinate()));
+
+        // A rover can land or move to coordinates where there isn't any rover
+        assertTrue(roverNavigationService.isSpaceAvailableToLandOrMove(
+                "TempRover",
+                4,
+                4));
 
     }
 

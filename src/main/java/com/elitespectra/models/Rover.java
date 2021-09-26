@@ -2,8 +2,8 @@ package com.elitespectra.models;
 
 public class Rover {
 
-    private Plateau plateau;
-    private String roverName;
+    private final Plateau plateau;
+    private final String roverName;
     private int xCoordinate;
     private int yCoordinate;
     private String face;
@@ -32,20 +32,20 @@ public class Rover {
         return xCoordinate;
     }
 
-    public int getyCoordinate() {
-        return yCoordinate;
-    }
-
-    public String getFace() {
-        return face;
-    }
-
     public void setxCoordinate(int xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
+    public int getyCoordinate() {
+        return yCoordinate;
+    }
+
     public void setyCoordinate(int yCoordinate) {
         this.yCoordinate = yCoordinate;
+    }
+
+    public String getFace() {
+        return face;
     }
 
     public void setFace(String face) {
