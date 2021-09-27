@@ -35,7 +35,6 @@ public class App {
         System.out.println(rover.getRoverName() + " " +
                 rover.getxCoordinate() + " " + rover.getyCoordinate() + " " + rover.getFace());
 
-
     }
 
 }

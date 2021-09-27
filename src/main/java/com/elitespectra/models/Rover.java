@@ -10,8 +10,9 @@ public class Rover {
 
     public Rover(Plateau plateau, String roverName, int xCoordinate, int yCoordinate, String face) {
 
-        if (xCoordinate > plateau.getX() || yCoordinate > plateau.getY())
-            throw new IllegalArgumentException(roverName + " Rover coordinates outside Plateau range");
+        if (xCoordinate < 0 || xCoordinate > plateau.getX() ||
+                yCoordinate < 0 || yCoordinate > plateau.getY())
+            throw new IllegalArgumentException(roverName + " rover coordinates negative or outside Plateau range");
 
         this.plateau = plateau;
         this.roverName = roverName;

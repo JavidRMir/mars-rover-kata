@@ -6,8 +6,12 @@ public class Plateau {
     private final int Y;
 
     public Plateau(int x, int y) {
-        X = x;
-        Y = y;
+
+        if (x <= 0 || y <= 0)
+            throw new IllegalArgumentException("Plateau dimensions can't be zero or negative");
+
+        this.X = x;
+        this.Y = y;
     }
 
     public int getX() {
