@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class NavigationServiceTest {
 
-    NavigationService roverNavigationService = new NavigationService();
+    NavigationService roverNavigationService = NavigationService.getInstance();
 
     Plateau plateau = new Plateau(5, 5);
 

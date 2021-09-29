@@ -8,9 +8,20 @@ import java.util.List;
 import java.util.Map;
 
 
-public class NavigationService {
+public final class NavigationService {
 
+    private static NavigationService INSTANCE;
     private final List<Rover> ALL_ROVERS = new ArrayList<>();
+
+    private NavigationService() {}
+
+    public synchronized static NavigationService getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new NavigationService();
+        }
+
+        return INSTANCE;
+    }
 
     public void addRover(Rover rover) throws IllegalArgumentException {
 

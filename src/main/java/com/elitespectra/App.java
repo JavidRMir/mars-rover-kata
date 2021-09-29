@@ -14,7 +14,7 @@ public class App {
         Rover beta = new Rover(plateau, "Beta", 3, 3, "E");
         Rover vega = new Rover(plateau, "Vega", 2, 4, "N");
 
-        NavigationService roverNavigationService = new NavigationService();
+        NavigationService roverNavigationService = NavigationService.getInstance();
 
         roverNavigationService.addRover(alpha);
         roverNavigationService.addRover(beta);
