@@ -1,0 +1,58 @@
+@startuml
+
+class Plateau {
+
+    - X_COORDINATE : int final
+    - Y_COORDINATE : int final
+
+    + Plateau (int x, int y)
+    + getXCoordinate()
+    + getYCoordinate()
+
+}
+
+class Rover {
+
+    - PLATAEAU : Plateau final
+    - ROVER_NAME : String final
+    - xCoordinate : int
+    - yCoordinate : int
+    - face : String
+
+    + Rover (Plateau plateau, String roverName,
+      int xCoordinate, int yCoordinate, String face)
+
+    + getPlateau() : Plateau
+    + getRoverName() : String
+    + getxCoordinate() : int
+    + getyCoordinate() : int
+    + setxCoordinate(int x) : void
+    + setyCoordinate(int y) : void
+    + getFace() : String
+    + setFace(String face) : String
+
+}
+
+
+class NavigationService {
+
+    - ALL_ROVERS : List<Rover> final
+
+    + addRover(rover : Rover) : void
+    + navigateRover(rover : Rover, navigationPath : String) : void
+    + isSpaceAvailableToLandOrMove(roverName : String,
+      xCoordinate : int, yCoordinate : int) : boolean
+    + getAllRovers() : List<Rover>
+
+    - spinFace(tempFace : String, navigationCommand : String) : String
+    - moveRover(xCoordinate : int, yCoordinate : int,
+                tempFace : String, navigationCommand : String) : Map<String, Integer>
+
+
+}
+
+Plateau ... Rover
+Rover ... NavigationService
+
+
+@enduml

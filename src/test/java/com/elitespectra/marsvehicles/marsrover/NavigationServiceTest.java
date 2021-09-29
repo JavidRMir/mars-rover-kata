@@ -20,7 +20,7 @@ public class NavigationServiceTest {
 
 
     @Before
-    public void setUp() throws InstantiationException {
+    public void setUp() {
 
         // Try adding rovers to roverNavigationService which is an instance of NavigationService
         // If rover already exists in the roverNavigationService, it can't be added to roverNavigationService
@@ -29,6 +29,31 @@ public class NavigationServiceTest {
         roverNavigationService.addRover(beta);
         roverNavigationService.addRover(vega);
         roverNavigationService.addRover(gamma);
+
+    }
+
+
+    @Test
+    public void checkExistingRoverCantBeAddedAgainToNavigationService() {
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.addRover(alpha));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.addRover(gamma));
+    }
+
+
+    @Test
+    public void checkInitialRoverCoordinatesNotOutsidePlateau() {
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.addRover(new Rover(plateau, "Zetron", 1,
+                        plateau.getXCoordinate() + 1, "N")));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.addRover(new Rover(plateau, "Sirius", plateau.getXCoordinate() + 1,
+                        plateau.getXCoordinate() + 1, "N")));
 
     }
 
@@ -67,30 +92,17 @@ public class NavigationServiceTest {
 
         assertEquals("00W", actualCoordinatesAndFace);
 
-
     }
+
 
     @Test
     public void checkRoverCantMoveOutsidePlateau() {
 
         assertThrows(IllegalArgumentException.class, () ->
-                        roverNavigationService.navigateRover(gamma, "F"));
+                roverNavigationService.navigateRover(gamma, "F"));
 
         assertThrows(IllegalArgumentException.class, () ->
                 roverNavigationService.navigateRover(gamma, "LLB"));
-    }
-
-    @Test
-    public void checkInitialRoverCoordinatesNotOutsidePlateau() {
-
-        assertThrows(IllegalArgumentException.class, () ->
-                roverNavigationService.addRover(new Rover(plateau, "Zetron", 1,
-                        plateau.getX() + 1, "N")));
-
-        assertThrows(IllegalArgumentException.class, () ->
-                roverNavigationService.addRover(new Rover(plateau, "Sirius", plateau.getX() + 1,
-                        plateau.getX() + 1, "N")));
-
     }
 
 

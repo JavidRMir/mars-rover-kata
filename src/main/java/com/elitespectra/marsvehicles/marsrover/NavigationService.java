@@ -12,17 +12,17 @@ public class NavigationService {
 
     private final List<Rover> ALL_ROVERS = new ArrayList<>();
 
-    public void addRover(Rover rover) throws InstantiationException {
+    public void addRover(Rover rover) throws IllegalArgumentException {
 
         // Check If roverName already exists, not allowed
         if (ALL_ROVERS.contains(rover)) {
-            throw new InstantiationException(rover.getRoverName() +
-                    " rover already exists in the (Mars) Navigation Service");
+            throw new IllegalArgumentException(rover.getRoverName() +
+                    " rover already exists in the Navigation Service");
         }
 
         // Check if any existing rover is not positioned at the newly adding rover coordinates
         if (!isSpaceAvailableToLandOrMove(rover.getRoverName(), rover.getxCoordinate(), rover.getyCoordinate()))
-            throw new InstantiationException("There's already a rover at these coordinates");
+            throw new IllegalArgumentException("There's already a rover at these coordinates");
 
         ALL_ROVERS.add(rover);
     }
@@ -41,7 +41,6 @@ public class NavigationService {
         boolean roverNavigationSuccess = false;
 
         for (var navigationCommand : navigationCommandList) {
-
             switch (navigationCommand) {
                 case "R", "L" -> tempFace = spinFace(tempFace, navigationCommand);
                 case "F", "B" -> {
@@ -50,8 +49,8 @@ public class NavigationService {
                             tempCoordinatesMap.get("yCoordinate"),
                             tempFace, navigationCommand);
 
-                    if (tempCoordinatesMap.get("xCoordinate") > rover.getPlateau().getX()
-                            || tempCoordinatesMap.get("yCoordinate") > rover.getPlateau().getY()) {
+                    if (tempCoordinatesMap.get("xCoordinate") > rover.getPlateau().getXCoordinate()
+                            || tempCoordinatesMap.get("yCoordinate") > rover.getPlateau().getYCoordinate()) {
 
                         roverNavigationSuccess = false;
 
@@ -122,7 +121,7 @@ public class NavigationService {
 
     }
 
-    public List<Rover> getALL_ROVERS() {
+    public List<Rover> getAllRovers() {
         return ALL_ROVERS;
     }
 }

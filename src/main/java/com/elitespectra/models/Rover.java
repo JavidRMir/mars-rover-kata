@@ -2,31 +2,31 @@ package com.elitespectra.models;
 
 public class Rover {
 
-    private final Plateau plateau;
-    private final String roverName;
+    private final Plateau PLATEAU;
+    private final String ROVER_NAME;
     private int xCoordinate;
     private int yCoordinate;
     private String face;
 
     public Rover(Plateau plateau, String roverName, int xCoordinate, int yCoordinate, String face) {
 
-        if (xCoordinate < 0 || xCoordinate > plateau.getX() ||
-                yCoordinate < 0 || yCoordinate > plateau.getY())
+        if (xCoordinate < 0 || xCoordinate > plateau.getXCoordinate() ||
+                yCoordinate < 0 || yCoordinate > plateau.getYCoordinate())
             throw new IllegalArgumentException(roverName + " rover coordinates negative or outside Plateau range");
 
-        this.plateau = plateau;
-        this.roverName = roverName;
+        this.PLATEAU = plateau;
+        this.ROVER_NAME = roverName;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.face = face;
     }
 
     public Plateau getPlateau() {
-        return plateau;
+        return PLATEAU;
     }
 
     public String getRoverName() {
-        return roverName;
+        return ROVER_NAME;
     }
 
     public int getxCoordinate() {

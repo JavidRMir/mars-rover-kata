@@ -12,19 +12,15 @@ public class App {
 
         Rover alpha = new Rover(plateau, "Alpha", 1, 2, "N");
         Rover beta = new Rover(plateau, "Beta", 3, 3, "E");
-        Rover vega = new Rover(plateau, "Beta", 2, 4, "N");
+        Rover vega = new Rover(plateau, "Vega", 2, 4, "N");
 
         NavigationService roverNavigationService = new NavigationService();
 
-        try {
-            roverNavigationService.addRover(alpha);
-            roverNavigationService.addRover(beta);
-            roverNavigationService.addRover(vega);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        }
+        roverNavigationService.addRover(alpha);
+        roverNavigationService.addRover(beta);
+        roverNavigationService.addRover(vega);
 
-        var rovers = roverNavigationService.getALL_ROVERS();
+        var rovers = roverNavigationService.getAllRovers();
 
         var rover = rovers.get(2);
         System.out.println(rover.getRoverName() + " " +
@@ -34,6 +30,7 @@ public class App {
         roverNavigationService.navigateRover(rover, navigationCommand);
         System.out.println(rover.getRoverName() + " " +
                 rover.getxCoordinate() + " " + rover.getyCoordinate() + " " + rover.getFace());
+
 
     }
 
