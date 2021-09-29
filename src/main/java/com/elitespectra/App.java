@@ -4,6 +4,8 @@ import com.elitespectra.marsvehicles.marsrover.NavigationService;
 import com.elitespectra.models.Plateau;
 import com.elitespectra.models.Rover;
 
+import java.util.Arrays;
+
 
 public class App {
     public static void main(String[] args) {

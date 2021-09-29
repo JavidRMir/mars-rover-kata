@@ -41,6 +41,9 @@ public final class NavigationService {
 
     public void navigateRover(Rover rover, String navigationPath) {
 
+        if (!ALL_ROVERS.contains(rover)) throw new IllegalArgumentException(rover.getRoverName() +
+                " rover needs to be added to the NavigationService before navigating in the Plateau");
+
         var navigationCommandList = navigationPath.split("");
 
         Map<String, Integer> tempCoordinatesMap = Map.of(
@@ -135,4 +138,6 @@ public final class NavigationService {
     public List<Rover> getAllRovers() {
         return ALL_ROVERS;
     }
+
+
 }

@@ -17,6 +17,7 @@ public class NavigationServiceTest {
     Rover beta = new Rover(plateau, "Beta", 3, 3, "E");
     Rover vega = new Rover(plateau, "Beta", 2, 4, "N");
     Rover gamma = new Rover(plateau, "Gamma", 5, 5, "N");
+    Rover dummy = new Rover(plateau, "Dummy", 0, 0, "N");
 
 
     @Before
@@ -34,7 +35,20 @@ public class NavigationServiceTest {
 
 
     @Test
+    public void checkRoverCantNavigateIfNotPartOfNavigationService() {
+
+        // Rover can't be navigated unless added to the NavigationService
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.navigateRover(dummy, "F"));
+
+    }
+
+
+    @Test
     public void checkExistingRoverCantBeAddedAgainToNavigationService() {
+
+        // A rover can't be added (again) if it already exists in the NavigationService
 
         assertThrows(IllegalArgumentException.class, () ->
                 roverNavigationService.addRover(alpha));
@@ -45,7 +59,9 @@ public class NavigationServiceTest {
 
 
     @Test
-    public void checkInitialRoverCoordinatesNotOutsidePlateau() {
+    public void checkInitialLandingRoverCoordinatesNotOutsidePlateau() {
+
+        // A rover can't be landed outside of the Plateau
 
         assertThrows(IllegalArgumentException.class, () ->
                 roverNavigationService.addRover(new Rover(plateau, "Zetron", 1,
@@ -60,6 +76,9 @@ public class NavigationServiceTest {
 
     @Test
     public void checkForwardMovingFinalRoverCoordinatesAndFace() {
+
+        // check final coordinates of a Forward moving rover
+        // after it receives and executes navigation commands
 
         roverNavigationService.navigateRover(alpha, "LFLFLFLFF");
 
@@ -84,6 +103,9 @@ public class NavigationServiceTest {
     @Test
     public void checkForwardAndBackwardMovingFinalRoverCoordinatesAndFace() {
 
+        // check final coordinates of a Forward And Backward moving rover
+        // after it receives and executes navigation commands
+
         roverNavigationService.navigateRover(vega, "BBBLFLFRF");
 
         String actualCoordinatesAndFace = String.valueOf(vega.getxCoordinate()) +
@@ -96,7 +118,9 @@ public class NavigationServiceTest {
 
 
     @Test
-    public void checkRoverCantMoveOutsidePlateau() {
+    public void checkRoverCantNavigateOutsideOfPlateau() {
+
+        // A rover can't be navigated to outside of the Plateau
 
         assertThrows(IllegalArgumentException.class, () ->
                 roverNavigationService.navigateRover(gamma, "F"));
@@ -109,19 +133,21 @@ public class NavigationServiceTest {
     @Test
     public void checkRoverNotGoingToCollide() {
 
-        // A rover can't be landed or moved to coordinates where there's a rover already positioned
+        // A rover CAN'T be landed or moved to coordinates where there's a rover already positioned
+
         assertFalse(roverNavigationService.isSpaceAvailableToLandOrMove(
                 "TempRover",
                 alpha.getxCoordinate(),
                 alpha.getyCoordinate()));
 
-        // A rover can't be landed or moved to coordinates where there's a rover already positioned
         assertFalse(roverNavigationService.isSpaceAvailableToLandOrMove(
                 "TempRover",
                 beta.getxCoordinate(),
                 beta.getyCoordinate()));
 
-        // A rover can land or move to coordinates where there isn't any rover
+
+        // A rover CAN be landed or moved to coordinates where there ISN'T a rover positioned
+
         assertTrue(roverNavigationService.isSpaceAvailableToLandOrMove(
                 "TempRover",
                 4,
