@@ -23,8 +23,8 @@ public class NavigationServiceTest {
     @Before
     public void setUp() {
 
-        // Try adding rovers to roverNavigationService which is an instance of NavigationService
         // If rover already exists in the roverNavigationService, it can't be added to roverNavigationService
+        // It will throw an exception " ...rover already exists in the Navigation Service"
 
         roverNavigationService.addRover(alpha);
         roverNavigationService.addRover(beta);
