@@ -2,10 +2,7 @@ package com.elitespectra.marsvehicles.marsrover;
 
 import com.elitespectra.models.Rover;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public final class NavigationService {
@@ -26,7 +23,8 @@ public final class NavigationService {
     public void addRover(Rover rover) throws IllegalArgumentException {
 
         // Check If roverName already exists, not allowed
-        if (ALL_ROVERS.contains(rover)) {
+        var roverIndex = getRoverIndex(rover.getRoverName());
+        if (roverIndex != -1) {
             throw new IllegalArgumentException(rover.getRoverName() +
                     " rover already exists in the Navigation Service");
         }
@@ -35,14 +33,20 @@ public final class NavigationService {
         if (!isSpaceAvailableToLandOrMove(rover.getRoverName(), rover.getxCoordinate(), rover.getyCoordinate()))
             throw new IllegalArgumentException("There's already a rover at these coordinates");
 
-        ALL_ROVERS.add(rover);
+        // Add a copy of the rover, not reference but value using Rover copy constructor
+        ALL_ROVERS.add(new Rover(rover));
     }
 
 
-    public void navigateRover(Rover rover, String navigationPath) {
+    public void navigateRover(String roverName, String navigationPath) {
 
-        if (!ALL_ROVERS.contains(rover)) throw new IllegalArgumentException(rover.getRoverName() +
+        // Check if rover exists in NavigationService in ALL_ROVERS
+        var roverIndex = getRoverIndex(roverName);
+        if (roverIndex == -1) throw new IllegalArgumentException(roverName +
                 " rover needs to be added to the NavigationService before navigating in the Plateau");
+
+        var rover = ALL_ROVERS.get(roverIndex);
+
 
         var navigationCommandList = navigationPath.split("");
 
@@ -136,8 +140,20 @@ public final class NavigationService {
     }
 
     public List<Rover> getAllRovers() {
-        return ALL_ROVERS;
+        List<Rover> tempAllRovers = new ArrayList<Rover>();
+        for (var rover : ALL_ROVERS) {
+            tempAllRovers.add(new Rover(rover));
+        }
+        return Collections.unmodifiableList(tempAllRovers);
     }
 
+    public int getRoverIndex(String roverName) {
+        for (var rover : ALL_ROVERS) {
+            if (roverName.equalsIgnoreCase(rover.getRoverName())) {
+                return ALL_ROVERS.indexOf(rover);
+            }
+        }
+        return -1;
+    }
 
 }

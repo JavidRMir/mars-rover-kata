@@ -21,6 +21,12 @@ public class Rover {
         this.face = face;
     }
 
+    // Copy constructor
+    public Rover(Rover rover) {
+        this(rover.getPlateau(), rover.getRoverName(),
+                rover.getxCoordinate(), rover.getyCoordinate(), rover.getFace());
+    }
+
     public Plateau getPlateau() {
         return PLATEAU;
     }

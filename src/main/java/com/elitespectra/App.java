@@ -24,12 +24,22 @@ public class App {
 
         var rovers = roverNavigationService.getAllRovers();
 
+//        for (var rover : rovers) {
+//            System.out.println(rover.getRoverName() + " " +
+//                    rover.getxCoordinate() + " " + rover.getyCoordinate() + " " + rover.getFace());
+//        }
+
+
+
+       rovers = roverNavigationService.getAllRovers();
         var rover = rovers.get(2);
         System.out.println(rover.getRoverName() + " " +
                 rover.getxCoordinate() + " " + rover.getyCoordinate() + " " + rover.getFace());
 
         var navigationCommand = "BBBLFLFRF";
-        roverNavigationService.navigateRover(rover, navigationCommand);
+        roverNavigationService.navigateRover(rover.getRoverName(), navigationCommand);
+        rovers = roverNavigationService.getAllRovers();
+        rover = rovers.get(2);
         System.out.println(rover.getRoverName() + " " +
                 rover.getxCoordinate() + " " + rover.getyCoordinate() + " " + rover.getFace());
 

@@ -2,7 +2,6 @@ package com.elitespectra.marsvehicles.marsrover;
 
 import com.elitespectra.models.Plateau;
 import com.elitespectra.models.Rover;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -15,21 +14,32 @@ public class NavigationServiceTest {
 
     Rover alpha = new Rover(plateau, "Alpha", 1, 2, "N");
     Rover beta = new Rover(plateau, "Beta", 3, 3, "E");
-    Rover vega = new Rover(plateau, "Beta", 2, 4, "N");
+    Rover vega = new Rover(plateau, "Vega", 2, 4, "N");
     Rover gamma = new Rover(plateau, "Gamma", 5, 5, "N");
     Rover dummy = new Rover(plateau, "Dummy", 0, 0, "N");
 
 
-    @Before
-    public void setUp() {
-
-        // If rover already exists in the roverNavigationService, it can't be added to roverNavigationService
-        // It will throw an exception " ...rover already exists in the Navigation Service"
+    @Test
+    public void checkForwardAndBackwardMovingFinalRoverCoordinatesAndFace() {
 
         roverNavigationService.addRover(alpha);
         roverNavigationService.addRover(beta);
         roverNavigationService.addRover(vega);
         roverNavigationService.addRover(gamma);
+
+        // check final coordinates of a Forward And Backward moving rover
+        // from NavigatuonService after it receives and executes navigation commands
+
+        var rover = getUpdatedRover(vega.getRoverName());
+
+        roverNavigationService.navigateRover(rover.getRoverName(), "BBBLFLFRF");
+        rover = getUpdatedRover(rover.getRoverName());
+
+        String actualCoordinatesAndFace = String.valueOf(rover.getxCoordinate()) +
+                String.valueOf(rover.getyCoordinate()) +
+                rover.getFace();
+
+        assertEquals("00W", actualCoordinatesAndFace);
 
     }
 
@@ -40,7 +50,7 @@ public class NavigationServiceTest {
         // Rover can't be navigated unless added to the NavigationService
 
         assertThrows(IllegalArgumentException.class, () ->
-                roverNavigationService.navigateRover(dummy, "F"));
+                roverNavigationService.navigateRover(dummy.getRoverName(), "F"));
 
     }
 
@@ -80,39 +90,29 @@ public class NavigationServiceTest {
         // check final coordinates of a Forward moving rover
         // after it receives and executes navigation commands
 
-        roverNavigationService.navigateRover(alpha, "LFLFLFLFF");
+        var rover = getUpdatedRover(alpha.getRoverName());
+        roverNavigationService.navigateRover(rover.getRoverName(), "LFLFLFLFF");
 
-        String actualCoordinatesAndFace = String.valueOf(alpha.getxCoordinate()) +
-                String.valueOf(alpha.getyCoordinate()) +
-                alpha.getFace();
+        rover = getUpdatedRover(rover.getRoverName());
+
+        String actualCoordinatesAndFace = String.valueOf(rover.getxCoordinate()) +
+                String.valueOf(rover.getyCoordinate()) +
+                rover.getFace();
 
         assertEquals("13N", actualCoordinatesAndFace);
 
 
-        roverNavigationService.navigateRover(beta, "FFRFFRFRRF");
+        rover = getUpdatedRover(beta.getRoverName());
 
-        actualCoordinatesAndFace = String.valueOf(beta.getxCoordinate()) +
-                String.valueOf(beta.getyCoordinate()) +
-                beta.getFace();
+        roverNavigationService.navigateRover(rover.getRoverName(), "FFRFFRFRRF");
+
+        rover = getUpdatedRover(rover.getRoverName());
+
+        actualCoordinatesAndFace = String.valueOf(rover.getxCoordinate()) +
+                String.valueOf(rover.getyCoordinate()) +
+                rover.getFace();
 
         assertEquals("51E", actualCoordinatesAndFace);
-
-    }
-
-
-    @Test
-    public void checkForwardAndBackwardMovingFinalRoverCoordinatesAndFace() {
-
-        // check final coordinates of a Forward And Backward moving rover
-        // after it receives and executes navigation commands
-
-        roverNavigationService.navigateRover(vega, "BBBLFLFRF");
-
-        String actualCoordinatesAndFace = String.valueOf(vega.getxCoordinate()) +
-                String.valueOf(vega.getyCoordinate()) +
-                vega.getFace();
-
-        assertEquals("00W", actualCoordinatesAndFace);
 
     }
 
@@ -122,11 +122,13 @@ public class NavigationServiceTest {
 
         // A rover can't be navigated to outside of the Plateau
 
-        assertThrows(IllegalArgumentException.class, () ->
-                roverNavigationService.navigateRover(gamma, "F"));
+        var rover = getUpdatedRover(gamma.getRoverName());
 
         assertThrows(IllegalArgumentException.class, () ->
-                roverNavigationService.navigateRover(gamma, "LLB"));
+                roverNavigationService.navigateRover(rover.getRoverName(), "F"));
+
+        assertThrows(IllegalArgumentException.class, () ->
+                roverNavigationService.navigateRover(rover.getRoverName(), "LLB"));
     }
 
 
@@ -135,24 +137,32 @@ public class NavigationServiceTest {
 
         // A rover CAN'T be landed or moved to coordinates where there's a rover already positioned
 
-        assertFalse(roverNavigationService.isSpaceAvailableToLandOrMove(
-                "TempRover",
-                alpha.getxCoordinate(),
-                alpha.getyCoordinate()));
+        var rover = getUpdatedRover(alpha.getRoverName());
 
         assertFalse(roverNavigationService.isSpaceAvailableToLandOrMove(
                 "TempRover",
-                beta.getxCoordinate(),
-                beta.getyCoordinate()));
+                rover.getxCoordinate(),
+                rover.getyCoordinate()));
 
 
-        // A rover CAN be landed or moved to coordinates where there ISN'T a rover positioned
+        rover = getUpdatedRover(beta.getRoverName());
+
+        assertFalse(roverNavigationService.isSpaceAvailableToLandOrMove(
+                "TempRover",
+                rover.getxCoordinate(),
+                rover.getyCoordinate()));
 
         assertTrue(roverNavigationService.isSpaceAvailableToLandOrMove(
                 "TempRover",
                 4,
                 4));
 
+    }
+
+
+    public Rover getUpdatedRover(String roverName) {
+        var rovers = roverNavigationService.getAllRovers();
+        return rovers.get(roverNavigationService.getRoverIndex(roverName));
     }
 
 }
