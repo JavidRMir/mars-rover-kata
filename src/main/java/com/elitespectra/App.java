@@ -5,6 +5,7 @@ import com.elitespectra.models.Plateau;
 import com.elitespectra.models.Rover;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 
 public class App {
@@ -31,13 +32,21 @@ public class App {
 
 
 
-       rovers = roverNavigationService.getAllRovers();
+        rovers = roverNavigationService.getAllRovers();
         var rover = rovers.get(2);
         System.out.println(rover.getRoverName() + " " +
                 rover.getxCoordinate() + " " + rover.getyCoordinate() + " " + rover.getFace());
 
+
         var navigationCommand = "BBBLFLFRF";
         roverNavigationService.navigateRover(rover.getRoverName(), navigationCommand);
+        rovers = roverNavigationService.getAllRovers();
+        rover = rovers.get(2);
+        System.out.println(rover.getRoverName() + " " +
+                rover.getxCoordinate() + " " + rover.getyCoordinate() + " " + rover.getFace());
+
+        vega.setxCoordinate(5);
+        vega.setyCoordinate(5);
         rovers = roverNavigationService.getAllRovers();
         rover = rovers.get(2);
         System.out.println(rover.getRoverName() + " " +

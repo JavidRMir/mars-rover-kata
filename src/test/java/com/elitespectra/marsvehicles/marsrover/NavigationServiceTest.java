@@ -19,6 +19,23 @@ public class NavigationServiceTest {
     Rover dummy = new Rover(plateau, "Dummy", 0, 0, "N");
 
 
+
+    @Test
+    public void checkPlateauCoordinatesCantBeZeroOrNegative() {
+
+        assertThrows(IllegalArgumentException.class, () ->
+                new Plateau(0, -5));
+
+    }
+
+    @Test
+    public void checkRoverCoordinatesCantBeNegative() {
+
+        assertThrows(IllegalArgumentException.class, () ->
+        new Rover(plateau, "Dummy", -2, -5, "E"));
+
+    }
+
     @Test
     public void checkForwardAndBackwardMovingFinalRoverCoordinatesAndFace() {
 
